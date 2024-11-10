@@ -19,10 +19,20 @@ export default function QuestionCard({ data, language }) {
     setShowAnswer(true);
   };
 
-  const handleNextQuestion = () => {
-    setCurrentQuestionIndex(
-      (prevIndex) => (prevIndex + 1) % filteredData.length
-    );
+  const handleQuestion = (type) => {
+    if (type === "previous") {
+      return () =>
+        setCurrentQuestionIndex(
+          (prevIndex) =>
+            (prevIndex - 1 + filteredData.length) % filteredData.length
+        );
+    } else if (type === "next") {
+      return () =>
+        setCurrentQuestionIndex(
+          (prevIndex) => (prevIndex + 1) % filteredData.length
+        );
+    }
+
     setShowAnswer(false);
   };
 
@@ -88,9 +98,14 @@ export default function QuestionCard({ data, language }) {
         </Button>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleNextQuestion} className="w-full">
-          Next Question
-        </Button>
+        <div className="flex gap-2 w-full">
+          <Button onClick={handleQuestion("previous")} className="w-full">
+            Previous Question
+          </Button>
+          <Button onClick={handleQuestion("next")} className="w-full">
+            Next Question
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );
