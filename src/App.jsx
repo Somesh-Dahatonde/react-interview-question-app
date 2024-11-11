@@ -76,7 +76,7 @@ export default function App() {
               </button>
             </h3>
             {openSections[index] && (
-              <div className="p-4">
+              <div className="">
                 {questions.map((question, questionIndex) => (
                   <button
                     key={questionIndex}
@@ -87,7 +87,10 @@ export default function App() {
                     }}
                     className="block w-full text-left py-2 px-4 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 rounded"
                   >
-                    {question.question}
+                    <div className="flex gap-2">
+                      <h6 className="font-bold text-sm"> {questionIndex + 1}. </h6>
+                      <p>{question.question}</p>
+                    </div>
                   </button>
                 ))}
               </div>
