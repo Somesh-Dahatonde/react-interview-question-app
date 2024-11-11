@@ -11,33 +11,36 @@ import {
 import { Button } from "./components/ui/button";
 import { Info } from "lucide-react";
 
-export default function QuestionCard({ data, language }) {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+// interface Question {
+//   question: string;
+//   answer: string;
+//   explanation?: string;
+// }
+
+// interface QuestionCardProps {
+//   data: Question | undefined;
+//   language: string;
+//   onNextQuestion: () => void;
+//   onPreviousQuestion: () => void;
+//   currentQuestionNumber: number;
+//   totalQuestions: number;
+// }
+
+export default function QuestionCard({
+  data,
+  language,
+  onNextQuestion,
+  onPreviousQuestion,
+  currentQuestionNumber,
+  totalQuestions,
+}) {
   const [showAnswer, setShowAnswer] = useState(false);
-  const filteredData = data || [];
+
   const handleShowAnswer = () => {
-    setShowAnswer(true);
+    setShowAnswer(!showAnswer);
   };
 
-  const handleQuestion = (type) => {
-    if (type === "previous") {
-      return () =>
-        setCurrentQuestionIndex(
-          (prevIndex) =>
-            (prevIndex - 1 + filteredData.length) % filteredData.length
-        );
-    } else if (type === "next") {
-      return () =>
-        setCurrentQuestionIndex(
-          (prevIndex) => (prevIndex + 1) % filteredData.length
-        );
-    }
-
-    setShowAnswer(false);
-  };
-
-  // Display message if no questions are available
-  if (filteredData.length === 0) {
+  if (!data) {
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
@@ -54,55 +57,54 @@ export default function QuestionCard({ data, language }) {
     );
   }
 
-  const currentQuestion = filteredData[currentQuestionIndex];
-
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">
-          {language} Interview Questions
+          {language} Interview Question
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mt-4 text-sm text-gray-500">
-          Question {currentQuestionIndex + 1} of {filteredData.length}
+          Question {currentQuestionNumber} of {totalQuestions}
         </div>
-        <div className="text-lg mb-4">
-          {`${currentQuestionIndex + 1}) `}
-          {currentQuestion?.question}
-        </div>
+        <div className="text-lg mb-4">{data.question}</div>
         {showAnswer && (
           <>
             <div className="text-lg mb-4 mt-4">
               <strong>Answer: </strong>
-              {currentQuestion.answer}
+              {data.answer}
             </div>
-            {currentQuestion.explanation && (
+            {data.explanation && (
               <div className="mt-4 p-4 bg-gray-100 rounded-md">
                 <h3 className="font-bold flex items-center">
                   <Info className="mr-2" />
                   Explanation
                 </h3>
-                <p className="mt-2">{currentQuestion.explanation}</p>
+                <p className="mt-2">{data.explanation}</p>
               </div>
             )}
           </>
         )}
 
-        <Button
-          onClick={handleShowAnswer}
-          className="mt-2 w-full"
-          disabled={showAnswer}
-        >
-          Show Answer
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold">Write your answer here</h3>
+          <textarea
+            className="h-40 border p-4 w-full mt-2 rounded"
+            placeholder="Type your answer here..."
+          ></textarea>
+        </div>
+        <Button onClick={handleShowAnswer} className="mt-2 w-full">
+          {showAnswer ? "Hide Answere" : "Show Answere"}
         </Button>
       </CardContent>
+
       <CardFooter>
         <div className="flex gap-2 w-full">
-          <Button onClick={handleQuestion("previous")} className="w-full">
+          <Button onClick={onPreviousQuestion} className="w-full">
             Previous Question
           </Button>
-          <Button onClick={handleQuestion("next")} className="w-full">
+          <Button onClick={onNextQuestion} className="w-full ">
             Next Question
           </Button>
         </div>
