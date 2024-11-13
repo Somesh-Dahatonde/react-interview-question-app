@@ -85,10 +85,14 @@ export default function App() {
                       setCurrentQuestionIndex(questionIndex);
                       setShowSlideBar(false); // Close sidebar on selection (for mobile)
                     }}
-                    className="block w-full text-left py-2 px-4 text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 rounded"
+                    className={`block w-full text-left py-2 px-4 rounded focus:outline-none 
+                      ${currentQuestionIndex === questionIndex ? 'bg-blue-600 text-white hover:bg-blue-600' : 'bg-gray-200 text-gray-700'} 
+                      hover:bg-blue-300 hover:text-white`}
                   >
                     <div className="flex gap-2">
-                      <h6 className="font-bold text-sm"> {questionIndex + 1}. </h6>
+                      <h6 className="font-bold text-sm">
+                        {questionIndex + 1}.
+                      </h6>
                       <p>{question.question}</p>
                     </div>
                   </button>
